@@ -12,11 +12,8 @@ if (array_key_exists('logout', $_POST)) {
 if (array_key_exists('write_a_post', $_POST)) {
     header('location:writeapost.php');
 }
-if (array_key_exists('mypost', $_POST)) {
-    header('location:mypost.php');
-}
-
-$sql = "SELECT * FROM `tbl_post` ORDER BY id DESC;";
+$id = $_SESSION['user_id'];
+$sql = "SELECT * FROM `tbl_post` WHERE author_id='$id'ORDER BY id DESC;";
 $execute = mysqli_query($con, $sql);
 $posts = mysqli_num_rows($execute);
 
@@ -73,8 +70,7 @@ $posts = mysqli_num_rows($execute);
         }
 
         .amit {
-            color: lightgray;
-            
+            color: gray;
         }
 
         .amit:hover {
@@ -89,6 +85,29 @@ $posts = mysqli_num_rows($execute);
             font-size: 1.3rem;
         }
 
+        #sbg {
+            background: 'videos/bible.mp4';
+        }
+
+        #loading {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            width: 100vw;
+            height: 40rem;
+            background-color: rgba(192, 192, 192, 0.5);
+        }
+
+        #bgvideo {
+            position: relative;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: auto;
+            margin-top: -20rem;
+        }
 
         button.like {
             width: 30px;
@@ -145,7 +164,7 @@ $posts = mysqli_num_rows($execute);
                     <li class="nav-item " id="name" style="margin-left: 5px;">
                         <form method="post">
                             <div class="dropdown open">
-                                <button class="btn amit dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: orange;">
+                                <button class="btn amit dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:lightgray;">
                                     Hello <?php echo $_SESSION['firstname'] ?>!
                                 </button>
                                 <div class="dropdown-menu bg-dark text-light" aria-labelledby="triggerId">
@@ -156,16 +175,13 @@ $posts = mysqli_num_rows($execute);
                         </form>
                     </li>
                     <li class="nav-item">
-                        <form method="POST">
-                            <button type="submit" name="mypost" class="btn amit" id="mypost" style="">
-                                My Post
-                            </button>
-                        </form>
-
+                        <a href="mypost.php" class="nav-link amit" style="color: orange;font-weight: bold;">
+                            My Posts
+                        </a>
                     </li>
                     <li class="nav-item">
 
-                        <a href="about.php" name="about" class="btn amit" id="" style="">
+                        <a href="about.php" name="about" class="btn amit" id="" style="color: lightgray;font-size: medium;">
                             About
                         </a>
 
@@ -175,24 +191,6 @@ $posts = mysqli_num_rows($execute);
         </div>
     </nav>
 
-    <!-- Showcase -->
-    <section class="bg-dark text-light p-5 p-lg-0 pt-lg-5 text-center text-sm-start" id="sbg">
-        <div class="container">
-            <div class="d-sm-flex align-items-center justify-content-between">
-                <div>
-                    <h1>Become a <span class="text-warning">Web Developer </span></h1>
-                    <p class="lead my-4">
-                        We focus on teaching our students the fundamentals of the latest
-                        and greatest technologies to prepare them for their first dev role
-                    </p>
-                    <button class="btn btn-primary btn-lg new-button">
-                        Start Learning
-                    </button>
-                </div>
-                <img class="img-fluid w-50 d-none d-sm-block " src="img/showcase.svg" alt="ShowCase Image">
-            </div>
-        </div>
-    </section>
 
 
 
@@ -205,8 +203,8 @@ $posts = mysqli_num_rows($execute);
 
 
                 <!-- Cards -->
-                <div class="col-8  g-5 ">
-                    <h3 class="pb-2">Recent Posts:</h3>
+                <div class="col-10  g-5 ">
+                    <h3 class="pb-2">My Recent Posts:</h3>
                     <?php
                     if ($posts > 0) {
                         while ($row = mysqli_fetch_array($execute)) { ?>
@@ -246,34 +244,6 @@ $posts = mysqli_num_rows($execute);
                     ?>
                 </div>
 
-
-                <div class="list-group col py-5 ">
-                    <div class="h3 pb-2 ">Popular Contents:</div>
-                    <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">List group item heading</h5>
-                            <small>3 days ago</small>
-                        </div>
-                        <p class="mb-1">Some placeholder content in a paragraph.</p>
-                        <small>And some small print.</small>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">List group item heading</h5>
-                            <small class="text-muted">3 days ago</small>
-                        </div>
-                        <p class="mb-1">Some placeholder content in a paragraph.</p>
-                        <small class="text-muted">And some muted small print.</small>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">List group item heading</h5>
-                            <small class="text-muted">3 days ago</small>
-                        </div>
-                        <p class="mb-1">Some placeholder content in a paragraph.</p>
-                        <small class="text-muted">And some muted small print.</small>
-                    </a>
-                </div>
             </div>
         </div>
     </section>
